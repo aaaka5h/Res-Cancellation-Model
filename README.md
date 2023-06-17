@@ -1,5 +1,29 @@
-# Res-Cancellation-Model
-Using machine learning to predict whether a customer will cancel their hotel reservation.
+# Reservation Cancellation Model
+(README written by my wonderful collaborator on this project: [Billy Orr](https://github.com/thebillyorr))
+
+Take a journey with me. You’re planning for your first-ever trip after the infamous COVID-19 lockdown - you’re sick of Vancouver and can’t get rid of the travel bug that’s been itching you. However, planning these large trips can be a logistical challenge. You need to consider things like budget, accommodation, transportation, and activities to do. You, like many other travellers, will opt to stay in a hotel but despite booking your room in advance, there are a multitude of reasons you may need to cancel your booking. Perhaps you found a better deal elsewhere, decided to change your itinerary, delayed flights, personal emergency, or any other unforeseen circumstances. The truth is, hotel room booking cancellations are a more frequent occurrence than thought of by most, and hotels are always looking for new ways to mitigate the economic cost of cancelled room bookings, evidently because a cancelled room booking equates to a missed opportunity for earned revenue. Using our knowledge of applied machine learning, Akash and I set out to build a supervised machine-learning model to tackle this issue.
+
+### What is Supervise Machine Learning?
+Firstly, what exactly is supervised machine learning? Supervised machine learning is a type of machine learning where an algorithm is trained to make predictions based on a labelled dataset. It involves teaching a computer to recognize patterns and make decisions based on past examples. For example, to distinguish between pictures of dogs and cats, you would gather a labelled dataset of images and train a model to identify the key characteristics that differentiate the two types of animals. The model can then classify new, unlabeled images based on what it has learned.
+
+### Our Model
+In our case, we fed our model data of previous hotel bookings including details such as check-in and check-out dates, room type, market segment of customers, whether or not they were repeat guests, and so much more. We used [this dataset on Kaggle](https://www.kaggle.com/datasets/gauravduttakiit/reservation-cancellation-prediction?select=train__dataset.csv) and a total of 17 different features. This data was labelled as either "cancelled" or "not cancelled", depending on whether the guest cancelled their booking or not. Using this labelled dataset, we trained our model to predict the likelihood of a booking being cancelled based on the input features. 
+
+Our model utilized the XGBoostClassifier algorithm. Without going into too much detail, the XGBoostClassifier works by building a series of decision trees, each one of which is trained to predict the output variable, such as room cancellation or no cancellation. The algorithm initially builds a simple tree and then improves it by adding more trees, with each new tree being built to correct the errors of the previous trees. An illustrative diagram is pictured below to give you a sense of how an XGBoostClassifer grows.
+
+![image](https://github.com/aaaka5h/Res-Cancellation-Model/assets/55672728/f8477a4d-b3fd-4575-95dd-810185bd43b2)
 
 
-Download the dataset from Kaggle [here](https://www.kaggle.com/datasets/gauravduttakiit/reservation-cancellation-prediction?select=train__dataset.csv)!
+Our model executed with a score of 0.8831312 - this means that our model was able to accurately predict whether or not a customer was going to cancel their room booking 88% of the time. Our model was also able to gather the five most important values when predicting whether or not a room will be cancelled. As seen depicted below in a SHAP plot, they are: Lead time, # of special requests, market segment type of the customer, the average price per room, and the arrival month.
+
+![image](https://github.com/aaaka5h/Res-Cancellation-Model/assets/55672728/aa481d6d-268c-40f7-a35d-908f36085e85)
+
+
+## Additional Analysis
+We decided to dig a little deeper into the association between lead time and cancellation rates which led us to a study done by Experience Hotel in 2016. Referring to Figure 3, this study found that the longer the lead time for any particular booking, the higher the rate of cancellation. More specifically, where the guest is due to check in more than 20 days out, the prospect of a cancelation is > 20%. We reasoned that this may be because short lead times are usually indicative of last-minute trips or emergencies. As a result, these customers are often in a rush and given the shorter lead time, won’t book accommodations for somewhere they aren’t seriously considering staying within the next couple of days. Whereas on the contrary, customers that are booking months in advance of plenty of time to find better deals or change their itinerary.
+
+![image](https://github.com/aaaka5h/Res-Cancellation-Model/assets/55672728/82d8d483-135f-4dfa-8522-43d81a73a1bc)
+
+
+## Caveats and Limitations on Case Study
+While a score of 0.88 is considered to be quite good, there are multiple areas within this case study which could have impacted the results of our model. First and fore-mostly, our data only included 17 features. This means our model failed to consider additional data points concerning the price of the actual room, where the hotel was located, the type of hotel, what hotel chain it was, different types of amenities, and distance from town or the airport. There are many additional features which may have influenced a customer's decision to cancel a room, which we did not consider. Secondly, our training data was pulled from one hotel. While our model may work well for this particular hotel, it will certainly fall short when attempting to generalize to other hotels. This is because each hotel has its own unique set of characteristics that could affect the cancellation rate differently including hotel location, hotel country, and brand. Lastly, we decided to drop the “Arrival Year” feature because we felt that it was not necessary. However, it is very likely that there are other features which we chose to include in the model which we should have also dropped in order to build a more accurate model. These caveats are harder to address as feature importance and impact can vary greatly depending on the context and industry.
